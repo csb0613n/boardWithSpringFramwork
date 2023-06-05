@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.mapper.CommentMapper">
+
+	<select id="selectOneBoardCommList" parameterType="int" resultType="com.example.demo.vo.CommentVO">
+		SELECT
+			bid, 
+			cid, 
+			cwriter, 
+			ccontent, 
+			submit_date
+		FROM 
+			comm
+		WHERE 
+			bid = #{bid} AND del_flag = 1
+	</select>
+	
+	<insert id="insertComm" parameterType="com.example.demo.vo.CommentVO">
+		INSERT INTO comm(
+			bid,
+			cid, 
+			cwriter, 
+			ccontent
+		)
+		VALUES(
+			#{bid}, 
+			nextval(cno_seq), 
+			#{cwriter}, 
+			#{ccontent}
+		)
+	</insert>
+	<update id="updateComm" parameterType="com.example.demo.vo.CommentVO">
+		UPDATE comm
+		SET
+			cwriter = #{cwriter},
+			ccontent = #{ccontent}
+		WHERE
+			cid = #{cid}
+	</update>
+	<update id="deleteComm" parameterType="int">
+		UPDATE comm
+		SET
+			del_flag = 0
+		WHERE
+			cid = #{cid}
+	</update>
+		
+	<update id="plusCntComm" parameterType="int">
+		UPDATE board
+		SET
+			cnt_comm = cnt_comm + 1
+		WHERE
+			id = #{id}
+	</update>
+	
+	<update id="minusCntComm" parameterType="int">
+		UPDATE board
+		SET
+			cnt_comm = cnt_comm - 1
+		WHERE
+			id = #{id}
+	</update>
+</mapper>

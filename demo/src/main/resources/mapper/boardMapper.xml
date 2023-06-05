@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.mapper.BoardMapper">
+
+	<select id="selectBoardList" resultType="com.example.demo.vo.BoardVO">
+		SELECT
+			id,
+			bname,
+			bwriter,
+			bcontent,
+			cnt_comm as cntComm
+		FROM
+			board
+		WHERE
+			del_flag = 1
+	</select>
+	
+	<select id="selectOneBoard" resultType="com.example.demo.vo.BoardVO" parameterType="int">
+		SELECT
+			id,
+			bname,
+			bwriter,
+			bcontent
+		FROM
+			board
+		WHERE
+			id = #{id}
+	</select>
+	
+	<insert id="insertBoard" parameterType="com.example.demo.vo.BoardVO">
+		<selectKey keyProperty="id" order="BEFORE" resultType="int" >
+		SELECT NEXTVAL(bno_seq) FROM dual
+		</selectKey>
+		INSERT INTO board(
+			id, 
+			bname, 
+			bwriter, 
+			bcontent
+		)
+		VALUE(
+			NEXTVAL(bno_seq),
+			#{bname},
+			#{bwriter},
+			#{bcontent}
+		)
+	</insert>
+	
+	<update id="updateBoard" parameterType="com.example.demo.vo.BoardVO">
+		UPDATE board
+		SET
+			bname = #{bname},
+			bwriter = #{bwriter},
+			bcontent = #{bcontent}
+		WHERE
+			id = #{id}
+	</update>
+	
+	<update id="deleteBoard" parameterType="int">
+		UPDATE board
+		SET
+			del_flag = 0
+		WHERE
+			id = #{id}
+	</update>
+
+</mapper>
